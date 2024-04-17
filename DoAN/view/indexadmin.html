@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Popular Products Section Using HTML , CSS , Bootstrap</title>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'><link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/sweetalert2/sweetalert2.min.css">
+  <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+</head>
+<body>
+    <nav class="navbar navbar-expand navbar-light">
+
+        <ul class="navbar-nav">
+        <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="/index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+        </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" data-target="#navbar-search1" href="#" role="button">
+        <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block" id="navbar-search1">
+        <form class="form-inline">
+        <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+        <button class="btn btn-navbar" type="submit">
+        <i class="fas fa-search"></i>
+        </button>
+        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+        <i class="fas fa-times"></i>
+        </button>
+        </div>
+        </div>
+        </form>
+        </div>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+        <i class="fas fa-th-large"></i>
+        </a>
+        </li>
+        </ul>
+        </nav>
+        <a href="/addproduct.html" style="margin: 1.8rem; border: 2px solid red;padding: 0.5rem;border-radius: 2.5rem;">Add Product</a>
+        <table class="table table-striped projects">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Year</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="product-table">
+            
+            </tbody>
+            
+
+
+        </table>
+        <br>
+            <button id="prev-page" class="pagination-button" style="margin-left: 40rem;">&#10094; Trang trước</button>
+            <button id="next-page" class="pagination-button" style="margin: 0.5rem;">&#10095; Trang tiếp theo </button>
+</body>
+</html>
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="dist/js/adminlte.js?v=3.2.0"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+    let currentPage = 1; // Biến để lưu trữ trang hiện tại
+
+    // Hàm để gọi API và lấy dữ liệu sản phẩm
+    function fetchProducts(page, limit) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/products",
+            data: { page: page, limit: limit },
+            dataType: 'json',
+            success: function(data){
+                let trHTML = '';
+                $.each(data, function(i, item){
+                    trHTML += '<tr id="product-' + item.id + '">'+
+                        '<td>'+item.name+'</td>'+
+                        '<td>'+item.price+'</td>'+
+                        '<td>'+item.year+'</td>'+
+                        '<td> <img src="/'+item.image+'" width="150px" height="200px"></td>'+
+                        '<td>'+'<a href="/editproduct.html?id='+ item._id+'"class="text-primary">Edit Product</a>'+'|'+
+                        '<a href="#"class="text-danger" onclick="Deleteproduct(\''+item._id+'\')">Delete Product</a>'+'</td>'+
+                        '</tr>';
+                });
+                $('#product-table').html(trHTML); // Thay đổi nội dung của bảng sản phẩm
+            },
+            error: function(xhr, textStatus, errorThrown){
+                alert("Có lỗi " + textStatus);
+            }
+        });
+    }
+
+    // Hàm để chuyển đến trang trước
+    $('#prev-page').click(function() {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchProducts(currentPage, 6);
+        }
+    });
+
+    // Hàm để chuyển đến trang tiếp theo
+    $('#next-page').click(function() {
+        currentPage++;
+        fetchProducts(currentPage, 6);
+    });
+
+    // Gọi API và hiển thị dữ liệu sản phẩm khi trang được tải lần đầu
+    fetchProducts(currentPage, 6);
+});
+
+</script>
+<script>
+    function Deleteproduct(id){
+        if(confirm('Bạnn có muốn xóa sản phẩm không?')){
+            $.ajax({
+                url:"http://localhost:3000/products/" + id,
+                type:"DELETE",
+                success:function(){
+                    alert('Xóa thành công');
+                    $('#product-'+id).remove();
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>

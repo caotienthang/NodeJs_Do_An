@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Registration Page</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
+<link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var Data = {
+            _id: id
+        };
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/users/"+id,
+            data: Data,
+            dataType: 'json',
+            success: function(data){
+                console.log(data);
+                $('#username').val(data.username);
+                $('#password').val(data.password);
+                $('#email').val(data.email);
+                var userRoles = data.role;
+                userRoles.forEach(function(role) {
+                $("input[name='roles'][value='" + role + "']").prop("checked", true);
+            });
+            },
+            error: function(xhr, textStatus, errorThrown){
+                alert("An error occurred while fetching product details: " + textStatus);
+            }
+        });
+    });
+</script>
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+<div class="card">
+<div class="card-body register-card-body">
+<p class="login-box-msg">Edit User</p>
+<form>
+<div class="input-group mb-3">
+<input type="text" id="username" class="form-control" placeholder="Full name">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-user"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="email" id="email" class="form-control" placeholder="Email">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-envelope"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="password" id="password" class="form-control" placeholder="Password">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-lock"></span>
+</div>
+</div>
+</div>
+<input type="checkbox" name="roles" value="ADMIN"> Admin<br>
+<input type="checkbox" name="roles" value="USER"> User<br>
+<input type="checkbox" name="roles" value="PUBLISHER"> Modifier<br>
+<div class="row">
+<div class="col-4">
+<button type="submit" class="btn btn-primary btn-block">Add User</button>
+</div>
+
+</div>
+</form>
+</div>
+
+</div>
+</div>
+
+
+<script src="/plugins/jquery/jquery.min.js"></script>
+
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="/dist/js/adminlte.min.js?v=3.2.0"></script>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+    $("button").click(function(event){
+        event.preventDefault();
+        var email = $("#email").val();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var roles = $("input[name='roles']:checked").map(function(){
+            return $(this).val();
+        }).toArray();
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var userData = {
+            email: email,
+            username: username,
+            password: password,
+            role: roles
+        };
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:3000/users/" + id,
+            contentType: "application/json", // Thêm loại nội dung
+            data: JSON.stringify(userData), // Chuyển dữ liệu thành chuỗi JSON
+            success: function(data, textStatus, xhr){
+                if(xhr.status === 200) {
+                    alert("Thêm user thành công!");
+                } else {
+                    alert("Đã xảy ra lỗi khi đăng ký: " + textStatus);
+                }
+            },
+            error: function(xhr, textStatus, errorThrown){
+                alert("Đã xảy ra lỗi khi đăng ký: " + textStatus);
+            }
+        });
+    });
+});
+</script>

@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Registration Page</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
+<link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+<script nonce="1c6a43c6-f63c-4139-a269-354a6a6f396f">try{(function(w,d){!function(dr,ds,dt,du){dr[dt]=dr[dt]||{};dr[dt].executed=[];dr.zaraz={deferred:[],listeners:[]};dr.zaraz.q=[];dr.zaraz._f=function(dv){return async function(){var dw=Array.prototype.slice.call(arguments);dr.zaraz.q.push({m:dv,a:dw})}};for(const dx of["track","set","debug"])dr.zaraz[dx]=dr.zaraz._f(dx);dr.zaraz.init=()=>{var dy=ds.getElementsByTagName(du)[0],dz=ds.createElement(du),dA=ds.getElementsByTagName("title")[0];dA&&(dr[dt].t=ds.getElementsByTagName("title")[0].text);dr[dt].x=Math.random();dr[dt].w=dr.screen.width;dr[dt].h=dr.screen.height;dr[dt].j=dr.innerHeight;dr[dt].e=dr.innerWidth;dr[dt].l=dr.location.href;dr[dt].r=ds.referrer;dr[dt].k=dr.screen.colorDepth;dr[dt].n=ds.characterSet;dr[dt].o=(new Date).getTimezoneOffset();if(dr.dataLayer)for(const dE of Object.entries(Object.entries(dataLayer).reduce(((dF,dG)=>({...dF[1],...dG[1]})),{})))zaraz.set(dE[0],dE[1],{scope:"page"});dr[dt].q=[];for(;dr.zaraz.q.length;){const dH=dr.zaraz.q.shift();dr[dt].q.push(dH)}dz.defer=!0;for(const dI of[localStorage,sessionStorage])Object.keys(dI||{}).filter((dK=>dK.startsWith("_zaraz_"))).forEach((dJ=>{try{dr[dt]["z_"+dJ.slice(7)]=JSON.parse(dI.getItem(dJ))}catch{dr[dt]["z_"+dJ.slice(7)]=dI.getItem(dJ)}}));dz.referrerPolicy="origin";dz.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(dr[dt])));dy.parentNode.insertBefore(dz,dy)};["complete","interactive"].includes(ds.readyState)?zaraz.init():dr.addEventListener("DOMContentLoaded",zaraz.init)}(w,d,"zarazData","script");})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};</script></head>
+<body class="hold-transition register-page">
+<div class="register-box">
+<div class="register-logo">
+<a href="/index2.html"><b>Admin</b>LTE</a>
+</div>
+<div class="card">
+<div class="card-body register-card-body">
+<p class="login-box-msg">Register a new membership</p>
+<form action="/index.html" method="post">
+<div class="input-group mb-3">
+<input type="text" id="username" class="form-control" placeholder="Full name">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-user"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="email" id="email" class="form-control" placeholder="Email">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-envelope"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="password" id="password" class="form-control" placeholder="Password">
+<div class="input-group-append">
+<div class="input-group-text">
+<span class="fas fa-lock"></span>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-4">
+<button type="submit" class="btn btn-primary btn-block">Register</button>
+</div>
+
+</div>
+</form>
+<div class="social-auth-links text-center">
+<p>- OR -</p>
+<a href="#" class="btn btn-block btn-primary">
+<i class="fab fa-facebook mr-2"></i>
+Sign up using Facebook
+</a>
+<a href="#" class="btn btn-block btn-danger">
+<i class="fab fa-google-plus mr-2"></i>
+Sign up using Google+
+</a>
+</div>
+<a href="login.html" class="text-center">I already have a membership</a>
+</div>
+
+</div>
+</div>
+
+
+<script src="/plugins/jquery/jquery.min.js"></script>
+
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="/dist/js/adminlte.min.js?v=3.2.0"></script>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("button").click(function(event){
+            event.preventDefault();
+            var email = $("#email").val();
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var userData = {
+                email: email,
+                username: username,
+                password: password
+            };
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/auth/register",
+                data: userData,
+                success: function(data, textStatus, xhr){
+                    if(xhr.status === 200) {
+                        alert("Đăng ký thành công!");
+                    } else {
+                        alert("Đã xảy ra lỗi khi đăng ký: " + textStatus);
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown){
+                    alert("Đã xảy ra lỗi khi đăng ký: " + textStatus);
+                }
+            });
+        });
+    });
+</script>
+
+

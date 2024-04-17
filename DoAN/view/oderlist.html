@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Popular Products Section Using HTML , CSS , Bootstrap</title>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'><link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/sweetalert2/sweetalert2.min.css">
+  <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+</head>
+<body>
+    <nav class="navbar navbar-expand navbar-light">
+
+        <ul class="navbar-nav">
+        <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="/index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="/shoppingcart.html" class="nav-link">Cart</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="/oderlist.html" class="nav-link">Oder List</a>
+        </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" data-target="#navbar-search1" href="#" role="button">
+        <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block" id="navbar-search1">
+        <form class="form-inline">
+        <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+        <button class="btn btn-navbar" type="submit">
+        <i class="fas fa-search"></i>
+        </button>
+        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+        <i class="fas fa-times"></i>
+        </button>
+        </div>
+        </div>
+        </form>
+        </div>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+        <i class="fas fa-th-large"></i>
+        </a>
+        </li>
+        </ul>
+        </nav>
+      
+        <table class="table table-striped projects">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>SDT</th>
+                    <th>Address</th>
+                    <th>Chi tiết đơn hàng</th>
+                </tr>
+            </thead>
+            <tbody id="product-table">
+
+            </tbody>
+        </table>
+</body>
+</html>
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="dist/js/adminlte.js?v=3.2.0"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:3000/oders",
+                dataType: 'json',
+                success: function(data){
+                    let trHTML='';
+                    $.each(data,function(i,item){
+                        trHTML = trHTML+'<tr id="product-' + item._id + '">'+
+                            '<td>'+item.name+'</td>'+
+                            '<td>'+item.email+'</td>'+
+                            '<td>'+item.SDT+'</td>'+
+                            '<td>'+ item.address+'</td>'+
+                            '<td>'+
+                            '<a href="/oderdetail.html?id='+item._id+'" class="text-primary">Chi Tiet Don Hang</a>'+'</td>'+
+                            '</tr>';
+                    });
+                    $('#product-table').append(trHTML);
+                },
+                error: function(xhr, textStatus, errorThrown){
+                    alert("Có lỗi " + textStatus);
+                }
+            });
+        });
+</script>

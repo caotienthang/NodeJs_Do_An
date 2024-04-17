@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Popular Products Section Using HTML , CSS , Bootstrap</title>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'><link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/sweetalert2/sweetalert2.min.css">
+  <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body {
+    margin: 0;
+    font-family: Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: .8125rem;
+    font-weight: 400;
+    line-height: 1.5385;
+    color: #333;
+    text-align: left;
+    background-color: #2196F3;
+}
+.mt-50{
+    margin-top: 50px;
+}
+.mb-50{
+
+    margin-bottom: 50px;
+}
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .1875rem;
+}
+.card-img-actions {
+    position: relative;
+}
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+    text-align: center;
+}
+.card-img{
+    width: 350px;
+}
+.star{
+        color: red;
+}
+.bg-cart {
+    background-color:orange;
+    color:#fff;
+}
+.bg-cart:hover {
+    
+    color:#fff;
+}
+.bg-buy {
+    background-color:green;
+    color:#fff;
+    padding-right: 29px;
+}
+.bg-buy:hover {
+    color:#fff;
+}
+a{
+
+    text-decoration: none !important;
+}
+  </style>
+  <script>
+    $(document).ready(function(){
+      let currentPage = 1; // Biến để lưu trữ trang hiện tại
+
+      // Hàm để gọi API và lấy dữ liệu sản phẩm
+      function fetchProducts(page, limit) {
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:3000/products",
+          data: { page: page, limit: limit },
+          dataType: 'json',
+          success: function(data){
+            let productHTML='';
+            $.each(data,function(i,item){
+              productHTML += '<div class="col-md-4 mt-2"><div class="card"><div class="card-body"><div class="card-img-actions"><img src="'+item.image+
+                  '" class="card-img img-fluid" width="96" height="350" alt=""></div>'+
+                  '</div><div class="card-body bg-light text-center"><div class="mb-2"><h6 class="font-weight-semibold mb-2"><a href="#" class="text-default mb-2" data-abc="true">'+item.name+'</a></h6>'+
+                      '<a href="#" class="text-muted" data-abc="true">Laptops & Notebooks</a>'+
+                      '</div><h3 class="mb-0 font-weight-semibold">'+item.price+'$</h3>'+
+                      ' <button onclick="addcart(\''+item._id+'\')" type="button" class="btn bg-cart"><i class="fa fa-cart-plus mr-2"></i> Add to cart</button>'+
+                      ' </div></div></div>';
+            });
+            $('#product-table').html(productHTML);
+            // Gán sự kiện click cho nút prev-page
+            $('#prev-page').click(function() {
+              if (currentPage > 1) {
+                currentPage--;
+                fetchProducts(currentPage, 6);
+              }
+            });
+            // Gán sự kiện click cho nút next-page
+            $('#next-page').click(function() {
+              currentPage++;
+              fetchProducts(currentPage, 6);
+            });
+          },
+          error: function(xhr, textStatus, errorThrown){
+            alert("An error occurred while fetching products: " + textStatus);
+          }
+        });
+      }
+      // Gọi API và hiển thị dữ liệu sản phẩm khi trang được tải lần đầu
+      fetchProducts(currentPage, 6);
+    });
+
+    function addcart(id){
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:3000/carts/add/"+id,
+        success: function(data, textStatus, xhr){
+          if(xhr.status === 200) {
+            alert("Thêm vào giỏ hàng thành công!");
+            window.location.href = "http://localhost:3000/index.html";
+          } else {
+            alert("Có Lỗi" + xhr.responseText);
+          }
+        },
+        error: function(xhr, textStatus, errorThrown){
+          alert("Có Lỗi" + errorThrown);
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-expand navbar-light">
+    <!-- Navbar content -->
+  </nav>
+  <div class="container d-flex justify-content-center mt-50 mb-50">
+    <div class="row" id="product-table">
+      <!-- Product table content -->
+    </div>
+  </div>
+  <br>
+  <button id="prev-page" class="pagination-button" style="margin-left: 40rem;">&#10094; Trang trước</button>
+  <button id="next-page" class="pagination-button" style="margin-left: 0.5rem;">&#10095; Trang tiếp theo </button> 
+</body>
+</html>
